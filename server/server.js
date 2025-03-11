@@ -11,7 +11,7 @@ const port = 8080;
 // Middleware
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors({
-    origin: 'http://localhost:5173', // Change this if frontend runs on another port
+    origin: 'http://localhost:5174', // Change this if frontend runs on another port
     credentials: true
 }));
 app.use(express.json());
@@ -75,26 +75,27 @@ app.post('/login', (req, res) => {
     });
 });
 
-app.get('/before-midnight', (req, res)=> {
-    const {type, setting, budget} = req.query
-    
-    let sql = "SELECT * FROM before_midnight WHERE 1=1"
-    const params = []
+app.get('/before-midnight', (req, res) => {
+    const { type, setting, budget } = req.query;
+    let sql = "SELECT * FROM bef_mid WHERE 1=1";
+    const params = [];
 
     if (type) {
-        sql += " AND type = ?"
-        params.push(type)
+        sql += " AND type = ?";
+        params.push(type);
     }
     if (setting) {
-        sql += " AND setting = ?"
-        params.push(setting)
+        sql += " AND setting = ?";
+        params.push(setting);
     }
     if (budget) {
-        sql += " AND budget_range = ?"
-        params.push(budget)
-    }
+        sql += " AND budget = ?";
+        params.push(budget.trim());
+    } 
 
-    sql += " ORDER BY RAND() LIMIT 1"
+    sql += " ORDER BY RAND() LIMIT 1"; // Pick a random matching activity
+
+    console.log("Executing SQL:", sql, "with params:", params); // Debug log
 
     db.query(sql, params, (err, results) => {
         if (err) {
@@ -103,9 +104,11 @@ app.get('/before-midnight', (req, res)=> {
         }
 
         if (results.length === 0) {
+            console.log("No matching activities found.");
             return res.status(404).json({ message: "No matching activities found" });
         }
 
         res.json(results[0]); // Return the randomly selected activity
     });
-})
+});
+

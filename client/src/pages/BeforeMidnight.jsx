@@ -62,15 +62,21 @@ function BeforeMidnight() {
         </div>
       </Form.Group>
 
-      {/* Budget Filter */}
+      {/* Budget Filter (Fix applied here) */}
       <Form.Group className="mt-3">
         <Form.Label>Budget</Form.Label>
-        <Form.Control
-          type="text"
-          placeholder="Enter budget (e.g., Under 500)"
-          value={filters.budget}
-          onChange={(e) => handleFilterChange('budget', e.target.value)}
-        />
+        <div className="d-flex justify-content-center">
+          {['Under 500', '500-1000', '1000+'].map((budgetOption) => (
+            <Button
+              key={budgetOption}
+              variant={filters.budget === budgetOption ? "primary" : "outline-secondary"}
+              className="mx-1"
+              onClick={() => handleFilterChange('budget', budgetOption)}
+            >
+              {budgetOption}
+            </Button>
+          ))}
+        </div>
       </Form.Group>
 
       <Button className="mt-3 w-100" variant="danger" onClick={fetchActivity}>
