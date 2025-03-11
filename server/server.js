@@ -74,3 +74,38 @@ app.post('/login', (req, res) => {
         });
     });
 });
+
+app.get('/before-midnight', (req, res)=> {
+    const {type, setting, budget} = req.query
+    
+    let sql = "SELECT * FROM before_midnight WHERE 1=1"
+    const params = []
+
+    if (type) {
+        sql += " AND type = ?"
+        params.push(type)
+    }
+    if (setting) {
+        sql += " AND setting = ?"
+        params.push(setting)
+    }
+    if (budget) {
+        sql += " AND budget_range = ?"
+        params.push(budget)
+    }
+
+    sql += " ORDER BY RAND() LIMIT 1"
+
+    db.query(sql, params, (err, results) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ error: "Database error" });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ message: "No matching activities found" });
+        }
+
+        res.json(results[0]); // Return the randomly selected activity
+    });
+})
