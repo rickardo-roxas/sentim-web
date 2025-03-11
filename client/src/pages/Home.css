@@ -1,0 +1,63 @@
+/* Background */
+.home-container {
+    background-color: #F8F9FA;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+/* Hero Section */
+.hero img {
+    width: 50%;
+    height: auto;
+    text-align: center;
+}
+
+.before-midnight {
+    background: #A4243B;
+    color: #FFECCC;
+    padding: 50px 20px;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    width: 100%;
+    height: 15rem;
+    flex-shrink: 0;
+}
+
+.always-in-my-head {
+    background: #FFC97E;
+    color: #3F414E;
+    padding: 50px 20px;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    width: 100%;
+    height: 15rem;
+    flex-shrink: 0;
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: left;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    opacity: 0.8;
+}
+
+  /* Feature Cards */
+.feature-card {
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Footer */
+.footer {
+    color: #555;
+    font-size: 14px;
+}
