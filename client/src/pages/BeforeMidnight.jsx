@@ -1,42 +1,65 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Container, Button, Form } from 'react-bootstrap';
 
 function BeforeMidnight() {
-  const [activity, setActivity] = useState('');
+  const [filters, setFilters] = useState({ type: '', setting: '', budget: '' });
+  const [activity, setActivity] = useState(null);
 
-  const generateActivity = () => {
-    setActivity('PICNIC'); // Placeholder logic, replace with API call if needed
+  const fetchActivity = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/before-midnight', { params: filters });
+      setActivity(response.data);
+    } catch (error) {
+      console.error("Error fetching activity:", error);
+      setActivity({ activity: "No activities found. Try different filters." });
+    }
   };
 
   return (
     <Container className="text-center mt-4">
       <h2>Before Midnight</h2>
-      <p>Moments we will never forget.</p>
+      <p>Plan an unforgettable date.</p>
+
+      {/* Filters */}
       <Form.Group>
         <Form.Label>Choose Type of Activity</Form.Label>
         <div className="d-flex justify-content-center">
-          <Button variant="outline-secondary" className="mx-1">Any</Button>
-          <Button variant="outline-secondary" className="mx-1">Fun</Button>
-          <Button variant="outline-secondary" className="mx-1">Dine</Button>
-          <Button variant="outline-secondary" className="mx-1">Art</Button>
+          {['Fun', 'Dine', 'Art'].map(type => (
+            <Button key={type} variant="outline-secondary" className="mx-1"
+              onClick={() => setFilters({ ...filters, type })}>
+              {type}
+            </Button>
+          ))}
         </div>
       </Form.Group>
+
       <Form.Group className="mt-3">
         <Form.Label>Choose Setting</Form.Label>
         <div className="d-flex justify-content-center">
-          <Button variant="outline-secondary" className="mx-1">Outdoor</Button>
-          <Button variant="outline-secondary" className="mx-1">Indoor</Button>
+          {['Outdoor', 'Indoor'].map(setting => (
+            <Button key={setting} variant="outline-secondary" className="mx-1"
+              onClick={() => setFilters({ ...filters, setting })}>
+              {setting}
+            </Button>
+          ))}
         </div>
       </Form.Group>
+
       <Form.Group className="mt-3">
-        <Form.Label>Budget (PHP)</Form.Label>
-        <Form.Control type="text" placeholder="Enter budget" />
+        <Form.Label>Budget</Form.Label>
+        <Form.Control type="text" placeholder="Enter budget (e.g., Under 500)"
+          onChange={(e) => setFilters({ ...filters, budget: e.target.value })} />
       </Form.Group>
-      <Button className="mt-3 w-100" variant="danger" onClick={generateActivity}>Generate</Button>
+
+      <Button className="mt-3 w-100" variant="danger" onClick={fetchActivity}>
+        Generate Date Idea
+      </Button>
+
       {activity && (
         <div className="mt-4 p-3 bg-danger text-white rounded">
-          <h3>{activity}</h3>
-          <p>Budget: P500</p>
+          <h3>{activity.activity}</h3>
+          <p>Budget: {activity.budget_range}</p>
           <Button variant="light">Save to Library</Button>
         </div>
       )}
