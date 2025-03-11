@@ -11,7 +11,7 @@ const port = 8080;
 // Middleware
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors({
-    origin: 'http://localhost:5174', // Change this if frontend runs on another port
+    origin: 'http://localhost:5173', // Change this if frontend runs on another port
     credentials: true
 }));
 app.use(express.json());
